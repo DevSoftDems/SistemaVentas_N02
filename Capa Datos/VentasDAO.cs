@@ -38,10 +38,12 @@ namespace Capa_Datos
 
                 // Grabar detalle de la venta PA_GRABAR_DETALLE_VENTA
                 foreach (Carrito item in listaCarrito)
-                {// ------- Modificacion para que se grabe el stock en vez de la Talla
+                {
+                    // ------- Modificacion para que se grabe el stock en vez de la Talla
                     DBHelper.EjecutarSP("PA_GRABAR_DETALLE_VENTA", num_vta, item.idProd, item.stock, item.precio, item.nomProd);
                 }
-                return $"La venta {num_vta} se ha registrado correctamente.";
+                // Retornar el número de venta generado para usarlo posteriormente
+                return num_vta;
             }
             catch (Exception ex)
             {
@@ -50,6 +52,23 @@ namespace Capa_Datos
             }
 
 
+        }
+
+        // Obtener información de la cabecera de una venta
+        public VentaCabecera ObtenerVentaCabecera(string numVenta)
+        {
+            DataTable dt = DBHelper.RetornaDataTable("PA_OBTENER_VENTA_CAB", numVenta);
+            string cad_json = JsonConvert.SerializeObject(dt);
+            var lista = JsonConvert.DeserializeObject<List<VentaCabecera>>(cad_json);
+            return lista.FirstOrDefault();
+        }
+
+        // Obtener el detalle de productos de una venta
+        public List<Carrito> ObtenerVentaDetalle(string numVenta)
+        {
+            DataTable dt = DBHelper.RetornaDataTable("PA_OBTENER_DETALLE_VENTA", numVenta);
+            string cad_json = JsonConvert.SerializeObject(dt);
+            return JsonConvert.DeserializeObject<List<Carrito>>(cad_json);
         }
 
     }
