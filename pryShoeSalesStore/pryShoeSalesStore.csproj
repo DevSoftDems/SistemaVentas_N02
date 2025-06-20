@@ -212,6 +212,7 @@
     <Content Include="Views\Ventas\IndexProductos.cshtml" />
     <Content Include="Views\Ventas\PagarCarrito.cshtml" />
     <Content Include="Views\Ventas\VerCarrito.cshtml" />
+    <Content Include="Views\Ventas\Boleta.cshtml" />
     <Content Include="Views\Productos\Productos.cshtml" />
     <Content Include="Views\Productos\CreateProductos.cshtml" />
     <Content Include="Views\Productos\EditarProductos.cshtml" />
