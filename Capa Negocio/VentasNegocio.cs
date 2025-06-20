@@ -27,6 +27,7 @@ namespace Capa_Negocio
         {
             try
             {
+                // El DAO retorna el número de la venta registrada
                 return dao.GrabarVenta(codigo, total, listaCarrito);
             }
             catch (Exception ex)
@@ -34,7 +35,17 @@ namespace Capa_Negocio
 
                 throw new Exception(ex.Message);
             }
-            
+
+        }
+
+        public VentaCabecera ObtenerVentaCabecera(string numVenta)
+        {
+            return dao.ObtenerVentaCabecera(numVenta);
+        }
+
+        public List<Carrito> ObtenerVentaDetalle(string numVenta)
+        {
+            return dao.ObtenerVentaDetalle(numVenta);
         }
     }
 }

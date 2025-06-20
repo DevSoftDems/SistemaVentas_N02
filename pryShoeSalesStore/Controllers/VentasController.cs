@@ -9,6 +9,7 @@ using Capa_Negocio;
 
 using Newtonsoft.Json;
 using System.Transactions;
+using Rotativa;
 
 namespace pryShoeSalesStore.Controllers
 {
@@ -147,6 +148,24 @@ namespace pryShoeSalesStore.Controllers
             return View(listacar);
         }
 
+        // --------------------------------------------------------------------
+        // GET: Ventas/GenerarBoleta
+        public ActionResult GenerarBoleta(string numVenta)
+        {
+            var cab = neg1.ObtenerVentaCabecera(numVenta);
+            var det = neg1.ObtenerVentaDetalle(numVenta);
+            BoletaViewModel modelo = new BoletaViewModel
+            {
+                Cabecera = cab,
+                Detalle = det
+            };
+
+            return new ViewAsPdf("Boleta", modelo)
+            {
+                FileName = $"Boleta_{numVenta}.pdf"
+            };
+        }
+
         // POST: Ventas/PagarCarrito
         [HttpPost]
         public ActionResult PagarCarrito(string codCli="")
@@ -159,13 +178,15 @@ namespace pryShoeSalesStore.Controllers
                 ViewBag.total = total; // Calcular el total del carrito
                 try
                 {
-                    // Calcular el total del carrito
-                    TempData["mensaje"] = neg1.GrabarVenta(codCli, total, listacar); // Grabar la venta
+                    // Calcular el total del carrito y grabar la venta
+                    string numVenta = neg1.GrabarVenta(codCli, total, listacar);
 
                     trx.Complete(); // Confirmar la transacción si todo sale bien
                     // Eliminar la sesión del carrito después de procesar el pago
                     Session.Remove("Carrito");
-                    return RedirectToAction("IndexProductos");
+
+                    // Redirigir a la generación automática de la boleta
+                    return RedirectToAction("GenerarBoleta", new { numVenta });
                 }
                 catch (Exception ex)
                 {

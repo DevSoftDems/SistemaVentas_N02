@@ -1,0 +1,49 @@
+@model Capa_Entidad.BoletaViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Boleta</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 4px; }
+        th { background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h2>Boleta de Venta</h2>
+    <p><strong>Número:</strong> @Model.Cabecera.num_vta</p>
+    <p><strong>Cliente:</strong> @Model.Cabecera.nomCli @Model.Cabecera.apeCli</p>
+    <p><strong>Fecha:</strong> @Model.Cabecera.fecha.ToShortDateString()</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Importe</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(var item in Model.Detalle)
+        {
+            <tr>
+                <td>@item.nomProd</td>
+                <td>@item.precio</td>
+                <td>@item.stock</td>
+                <td>@item.importe</td>
+            </tr>
+        }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" style="text-align:right">Total:</td>
+                <td>@Model.Cabecera.total</td>
+            </tr>
+        </tfoot>
+    </table>
+</body>
+</html>
